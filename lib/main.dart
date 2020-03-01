@@ -16,7 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'screens/asima_marketing_webview.dart';
 import 'screens/currency_exchange.dart';
@@ -27,20 +26,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-//  Widget _isUserSigned() {
-//    return StreamBuilder<FirebaseUser>(
-//      stream: FirebaseAuth.instance.onAuthStateChanged,
-//      // ignore: missing_return
-//      builder: (BuildContext context, snapshot) {
-//        if (snapshot.hasData) {
-//          Provider.of<UserData>(context).currentUserId = snapshot.data.uid;
-//        } else {
-////          TODO remove user
-//        }
-//      },
-//    );
-//  }
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -82,13 +67,4 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
-}
-
-//TODO: set provider at app start
-
-Future<String> getUserId(BuildContext context) async {
-  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  Provider.of<ProviderData>(context).currentUserId =
-      sharedPreferences.getString('userId');
-  return sharedPreferences.getString('userId');
 }

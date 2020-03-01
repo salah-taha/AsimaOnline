@@ -1,3 +1,4 @@
+import 'package:asima_online/models/provider_data.dart';
 import 'package:asima_online/screens/about_us.dart';
 import 'package:asima_online/screens/asima_books.dart';
 import 'package:asima_online/screens/asima_business.dart';
@@ -14,6 +15,8 @@ import 'package:asima_online/screens/question_answer.dart';
 import 'package:asima_online/screens/signin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_radio/flutter_radio.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 //home page screen
 
@@ -29,12 +32,23 @@ class _HomePageState extends State<HomePage> {
     FlutterRadio.audioStart();
   }
 
+  _getUserId(BuildContext context) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    Provider.of<ProviderData>(context, listen: false).currentUserId =
+        sharedPreferences.getString('userId') == ''
+            ? null
+            : sharedPreferences.getString('userId');
+    Provider.of<ProviderData>(context, listen: false).signInMethod =
+        sharedPreferences.getString('method') == ''
+            ? null
+            : sharedPreferences.getString('method');
+  }
+
   @override
   void initState() {
     super.initState();
-
-    //initialize audio player
     audioStart();
+    _getUserId(context);
   }
 
   @override

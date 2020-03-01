@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   static final _auth = FirebaseAuth.instance;
@@ -15,6 +16,7 @@ class AuthService {
   static FacebookLogin facebookLogin = new FacebookLogin();
   static void signUpWithEmail(BuildContext context, String name, String email,
       String password, String type) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -30,6 +32,8 @@ class AuthService {
             user.uid;
         Provider.of<ProviderData>(context, listen: false).signInMethod =
             'email';
+        pref.setString('userId', user.uid);
+        pref.setString('method', 'email');
         Navigator.pop(context);
       }
     } catch (err) {
@@ -40,12 +44,16 @@ class AuthService {
   static void signInWithEmail(
       BuildContext context, String email, String password) async {
     try {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+
       AuthResult authResult = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       FirebaseUser user = authResult.user;
       Provider.of<ProviderData>(context, listen: false).currentUserId =
           user.uid;
       Provider.of<ProviderData>(context, listen: false).signInMethod = 'email';
+      pref.setString('userId', user.uid);
+      pref.setString('method', 'email');
       Navigator.pop(context);
     } catch (e) {
       print(e);
@@ -54,6 +62,8 @@ class AuthService {
 
   static void signWithGoogle(BuildContext context) async {
     try {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+
       GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
       GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount.authentication;
@@ -76,6 +86,8 @@ class AuthService {
       Provider.of<ProviderData>(context, listen: false).currentUserId =
           user.uid;
       Provider.of<ProviderData>(context, listen: false).signInMethod = 'google';
+      pref.setString('userId', user.uid);
+      pref.setString('method', 'google');
       Navigator.pop(context);
     } catch (e) {
       print(e);
@@ -83,6 +95,8 @@ class AuthService {
   }
 
   static void signWithFacebook(BuildContext context) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
     FacebookLoginResult facebookLoginResult =
         await facebookLogin.logIn(['email', 'public_profile']);
     switch (facebookLoginResult.status) {
@@ -110,30 +124,40 @@ class AuthService {
             user.uid;
         Provider.of<ProviderData>(context, listen: false).signInMethod =
             'facebook';
+        pref.setString('userId', user.uid);
+        pref.setString('method', 'facebook');
         Navigator.pop(context);
         break;
     }
   }
 
   static void logout(BuildContext context) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
     var _signInMethod =
         Provider.of<ProviderData>(context, listen: false).signInMethod;
     if (_signInMethod == 'email') {
       _auth.signOut();
       Provider.of<ProviderData>(context, listen: false).currentUserId = null;
       Provider.of<ProviderData>(context, listen: false).signInMethod = null;
+      pref.setString('userId', '');
+      pref.setString('method', '');
       Navigator.pushReplacementNamed(context, SignIn.id);
     } else if (_signInMethod == 'google') {
       await googleSignIn.signOut();
       _auth.signOut();
       Provider.of<ProviderData>(context, listen: false).currentUserId = null;
       Provider.of<ProviderData>(context, listen: false).signInMethod = null;
+      pref.setString('userId', '');
+      pref.setString('method', '');
       Navigator.pushReplacementNamed(context, SignIn.id);
     } else if (_signInMethod == 'facebook') {
       await facebookLogin.logOut();
       _auth.signOut();
       Provider.of<ProviderData>(context, listen: false).currentUserId = null;
       Provider.of<ProviderData>(context, listen: false).signInMethod = null;
+      pref.setString('userId', '');
+      pref.setString('method', '');
       Navigator.pop(context);
     }
   }
