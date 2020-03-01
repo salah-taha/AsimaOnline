@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "475718967437",
+    "firebase_url": "https://asima-online.firebaseio.com",
+    "project_id": "asima-online",
+    "storage_bucket": "asima-online.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475718967437:android:3d1ce4369f0cb20aea82c4",
+        "android_client_info": {
+          "package_name": "net.asimaonline.asima_online"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "475718967437-4ms925tq0elb5r1s05goagc76k7jck9j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "net.asimaonline.asima_online",
+            "certificate_hash": "54f77aaa51ac68f8ad333f6133ccedb324b3ad9a"
+          }
+        },
+        {
+          "client_id": "475718967437-pch7iifsg7l78m511qn3r7o9sdrjkcv6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBT-hKGmM5MoHOmBeSaemFEgL0rSPDCFiI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "475718967437-pch7iifsg7l78m511qn3r7o9sdrjkcv6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

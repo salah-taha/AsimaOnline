@@ -1,0 +1,54 @@
+name: asima_online
+description: asima_online
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  cupertino_icons: ^0.1.2
+  webview_flutter:
+  flutter_radio: ^0.1.7
+  shared_preferences:
+  http:
+  intl: ^0.16.0
+  flutter_device_type: ^0.1.0
+  flutter_launcher_icons: "^0.6.1"
+  flutter_webview_plugin: ^0.3.10+1
+  cloud_firestore: ^0.13.0+1
+  firebase_auth: ^0.15.4
+  uuid:
+  path_provider:
+  firebase_storage:
+  cached_network_image:
+  image_picker:
+  firebase_core:
+  flutter_image_compress: ^0.6.5+1
+  google_sign_in:
+  provider:
+  flutter_facebook_login:
+  url_launcher: ^5.2.5
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - images/
+
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic

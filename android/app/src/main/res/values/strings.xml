@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Asima Online</string>
+    <string name="title">Asima Online</string>
+    <string name="android">Android</string>
+    <string name="facebook_app_id">776594502829962</string>
+    <string name="fb_login_protocol_scheme">fb776594502829962</string>
+</resources>
