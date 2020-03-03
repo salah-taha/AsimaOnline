@@ -578,9 +578,9 @@ class _AddQuestionScreenState extends State<AddQuestionScreen> {
                             });
                             await DatabaseService.uploadQuestion(
                                 selectedCat, _newQuestionField.text, context);
-                            setState(() {
-                              isLoading = false;
-                            });
+                            Navigator.pop(context);
+                            Navigator.pushReplacementNamed(
+                                context, QuestionAnswerScreen.id);
                           }
                         },
                         child: Padding(
