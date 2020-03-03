@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
+
 //asima business screen
 class AsimaBusiness extends StatefulWidget {
   static String id = 'asima_business';
@@ -30,8 +31,8 @@ class _AsimaBusinessState extends State<AsimaBusiness> {
   String selectedState;
   String selectedType;
   //cards reference from firebase
-  Future<QuerySnapshot> _cards = cardsRef.getDocuments();
-
+  Future<QuerySnapshot> _cards =
+      cardsRef.orderBy('timestamp', descending: true).getDocuments();
 
   //converting countries list to dropdown items
   List<DropdownMenuItem<String>> _convertToItems(List<dynamic> data) {
@@ -81,7 +82,6 @@ class _AsimaBusinessState extends State<AsimaBusiness> {
             elevation: 3,
             backgroundColor: Colors.grey[800],
             onPressed: () async {
-
               //goes to adding business screen
               await Navigator.push(
                   context,
@@ -350,6 +350,7 @@ class _AsimaBusinessState extends State<AsimaBusiness> {
     );
   }
 }
+
 //business card
 class BusinessCardWidget extends StatelessWidget {
   final isGroup;
@@ -503,8 +504,8 @@ class CardInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _userInfo() async {
-      DocumentSnapshot userDoc = await DatabaseService.getUserInfo(
-          Provider.of<ProviderData>(context).currentUserId);
+      DocumentSnapshot userDoc =
+          await DatabaseService.getUserInfo(cardModel.author);
       User user = User.fromDoc(userDoc);
       return user;
     }
@@ -859,26 +860,6 @@ class _AddingBusinessCardPageState extends State<AddingBusinessCardPage> {
           address: [selectedState, selectedCountry],
           secondaryImages: _handleSecondaryImages());
       DatabaseService.uploadBusinessCard(model, context);
-      setState(() {
-        serviceDescription = null;
-        selectedCountry = null;
-        selectedCountryNum = 0;
-        selectedState = null;
-        selectedType = null;
-        mainPhotoUrl = null;
-        mainImageFile = null;
-        photo1Url = null;
-        photo2Url = null;
-        photo3Url = null;
-        photo1File = null;
-        photo2File = null;
-        photo3File = null;
-        url_1 = null;
-        url_2 = null;
-        url_3 = null;
-        serviceName = null;
-        isUploading = false;
-      });
     }
   }
 

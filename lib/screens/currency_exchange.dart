@@ -436,8 +436,8 @@ class _MainPageState extends State<MainPage> with RouteAware {
                                         MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       new GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
+                                        onTap: () async {
+                                          await Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
@@ -446,6 +446,13 @@ class _MainPageState extends State<MainPage> with RouteAware {
                                                         this.rates,
                                                         1)),
                                           );
+                                          setState(() {
+                                            _isConvertionLoading = true;
+                                          });
+                                          _getRates();
+                                          setState(() {
+                                            _isConvertionLoading = false;
+                                          });
                                         },
                                         child: new Row(
                                           mainAxisAlignment:

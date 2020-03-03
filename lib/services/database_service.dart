@@ -3,6 +3,7 @@ import 'package:asima_online/models/idea_model.dart';
 import 'package:asima_online/models/job_chance_model.dart';
 import 'package:asima_online/models/provider_data.dart';
 import 'package:asima_online/models/user.dart';
+import 'package:asima_online/screens/asima_business.dart';
 import 'package:asima_online/utilities.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -38,7 +39,7 @@ class DatabaseService {
 
   static void uploadBusinessCard(
       BusinessCardModel model, BuildContext context) async {
-    cardsRef.document(model.id).setData({
+    await cardsRef.document(model.id).setData({
       'author': model.author,
       'id': model.id,
       'links': model.links,
@@ -47,8 +48,10 @@ class DatabaseService {
       'description': model.description,
       'mainImage': model.mainImage,
       'secondaryImages': model.secondaryImages,
-      'type': model.type
+      'type': model.type,
+      'timestamp': DateTime.now().toIso8601String(),
     });
+    Navigator.pushReplacementNamed(context, AsimaBusiness.id);
   }
 
   static Future<bool> uploadQuestion(
