@@ -8,7 +8,7 @@
     <application
         android:usesCleartextTraffic="true"
         android:name="io.flutter.app.FlutterApplication"
-        android:label="asima_online"
+        android:label="العاصمة اونلاين"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

@@ -2,11 +2,10 @@ import 'package:asima_online/models/provider_data.dart';
 import 'package:asima_online/screens/signin_screen.dart';
 import 'package:asima_online/services/database_service.dart';
 import 'package:asima_online/utilities.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatScreen extends StatefulWidget {
   static String id = 'chat_screen';
@@ -61,18 +60,18 @@ class _ChatScreenState extends State<ChatScreen> {
             : Container(
                 color: Color(0xfff2f2f2),
                 child: FutureBuilder(
-                  future: chatRoomsRef.getDocuments(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
+                  future: SharedPreferences.getInstance(),
+                  builder:
+                      // ignore: missing_return
+                      (context, AsyncSnapshot<SharedPreferences> snapshot) {
+                    if (snapshot.data.get('first_chat_open') == null ||
+                        snapshot.data.get('first_chat_open') == true) {
+                      return WelcomeScreen();
+                    } else if (!snapshot.data.get('first_chat_open')) {
+                      return ChatList();
                     }
-                    return ListView.builder(
-                      itemCount: snapshot.data.documents.length,
-                      itemBuilder: (context, index) {
-                        return ChatCard.fromDoc(snapshot.data.documents[index]);
-                      },
+                    return Center(
+                      child: CircularProgressIndicator(),
                     );
                   },
                 ),
@@ -80,78 +79,40 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 }
 
-class ChatCard extends StatelessWidget {
-  final image;
-  final title;
-  final docId;
-
-  ChatCard({this.title, this.image, this.docId});
-
-  factory ChatCard.fromDoc(DocumentSnapshot doc) {
-    return ChatCard(
-      image: doc['image'],
-      title: doc['name'],
-      docId: doc.documentID,
-    );
-  }
-
+class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ChatList(
-                        docId: docId,
-                        roomName: title,
-                      )));
-        },
-        child: Container(
-          decoration: BoxDecoration(
-              color: Color(
-                0xfff2f2f2,
+      padding: EdgeInsets.all(20),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey[900],
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'الدردشة فرصة لقضاء الحوائج وتبادل الأفكار: يتم متابعة جميع الرسائل وسيتم حذف أي مراسلات غير اخلاقية او غير قانونية وحظر أصحابها ويكون لوحده مسؤولا عنها لحين حذفها.',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
+                textAlign: TextAlign.center,
               ),
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.grey[400],
-                    offset: Offset(3, 3),
-                    blurRadius: 4,
-                    spreadRadius: 2),
-                BoxShadow(
-                    color: Colors.white,
-                    offset: Offset(-3, -3),
-                    blurRadius: 4,
-                    spreadRadius: 2),
-              ]),
-          height: MediaQuery.of(context).size.height * 0.15,
-          width: MediaQuery.of(context).size.width,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                CircleAvatar(
-                  backgroundColor: Colors.white,
-                  radius: MediaQuery.of(context).size.width * 0.1,
-                  backgroundImage: CachedNetworkImageProvider(image),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
             ),
-          ),
+            RaisedButton(
+              color: Colors.white,
+              child: Text('الدخول لغرفة الدردشة'),
+              onPressed: () async {
+                SharedPreferences _pref = await SharedPreferences.getInstance();
+                _pref.setBool('first_chat_open', false);
+                Navigator.pushReplacementNamed(context, ChatScreen.id);
+              },
+            )
+          ],
         ),
       ),
     );
@@ -159,13 +120,6 @@ class ChatCard extends StatelessWidget {
 }
 
 class ChatList extends StatefulWidget {
-  final docId;
-  final roomName;
-  ChatList({
-    this.docId,
-    this.roomName,
-  });
-
   @override
   _ChatListState createState() => _ChatListState();
 }
@@ -177,76 +131,66 @@ String message;
 class _ChatListState extends State<ChatList> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.roomName),
-        centerTitle: true,
-      ),
-      body: GestureDetector(
-        onTap: () {
-          _focusNode.unfocus();
-        },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            StreamBuilder(
-              stream: chatRoomsRef
-                  .document(widget.docId)
-                  .collection('messages')
-                  .orderBy('timestamp', descending: true)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-
-                return Expanded(
-                  child: ListView.builder(
-                    reverse: true,
-                    itemCount: snapshot.data.documents.length,
-                    itemBuilder: (context, index) {
-                      return MessageTile(
-                          userData: snapshot.data.documents[index]);
-                    },
-                  ),
+    return GestureDetector(
+      onTap: () {
+        _focusNode.unfocus();
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          StreamBuilder(
+            stream:
+                chatRoomRef.orderBy('timestamp', descending: true).snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(),
                 );
-              },
-            ),
-            Row(
-              children: <Widget>[
-                IconButton(
-                  onPressed: () {
-                    DatabaseService.sendMessage(
-                        message,
-                        widget.docId,
-                        Provider.of<ProviderData>(context, listen: false)
-                            .currentUserId);
-                    _messageField.clear();
+              }
+
+              return Expanded(
+                child: ListView.builder(
+                  reverse: true,
+                  itemCount: snapshot.data.documents.length,
+                  itemBuilder: (context, index) {
+                    return MessageTile(
+                        userData: snapshot.data.documents[index]);
                   },
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                  ),
-                  color: Colors.blue,
                 ),
-                Expanded(
-                  child: TextField(
-                    onChanged: (input) {
-                      message = input;
-                    },
-                    controller: _messageField,
-                    focusNode: _focusNode,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(5),
-                      labelText: 'أرسل رسالة',
-                    ),
+              );
+            },
+          ),
+          Row(
+            children: <Widget>[
+              IconButton(
+                onPressed: () {
+                  DatabaseService.sendMessage(
+                      message,
+                      Provider.of<ProviderData>(context, listen: false)
+                          .currentUserId);
+                  _messageField.clear();
+                },
+                icon: Icon(
+                  Icons.arrow_back_ios,
+                ),
+                color: Colors.blue,
+              ),
+              Expanded(
+                child: TextField(
+                  onChanged: (input) {
+                    message = input;
+                  },
+                  controller: _messageField,
+                  focusNode: _focusNode,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(5),
+                    labelText: 'أرسل رسالة',
                   ),
                 ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

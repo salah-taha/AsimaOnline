@@ -23,8 +23,8 @@ class DatabaseService {
     return userDoc;
   }
 
-  static sendMessage(String message, String roomId, String userId) {
-    chatRoomsRef.document(roomId).collection('messages').add({
+  static sendMessage(String message, String userId) {
+    chatRoomRef.add({
       'message': message,
       'author': userId,
       'timestamp': DateTime.now().toIso8601String(),
@@ -32,8 +32,7 @@ class DatabaseService {
   }
 
   static Stream getChatMessages(String roomId) {
-    final messages =
-        chatRoomsRef.document(roomId).collection('messages').snapshots();
+    final messages = chatRoomRef.snapshots();
     return messages;
   }
 
