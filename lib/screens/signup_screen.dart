@@ -74,9 +74,10 @@ class _SignUpState extends State<SignUp> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 25),
                           child: TextFormField(
-                            validator: (input) => input.isEmpty
-                                ? 'اسم المستخدم غير مناسب أو موجود مسبقاً'
-                                : null,
+                            validator: (input) =>
+                                input.isEmpty || input.contains('admin')
+                                    ? 'اسم المستخدم غير مناسب أو موجود مسبقاً'
+                                    : null,
                             onSaved: (input) {
                               setState(() {
                                 _name = input;
