@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:asima_online/models/country.dart';
 import 'package:asima_online/models/idea_model.dart';
 import 'package:asima_online/models/provider_data.dart';
-import 'package:asima_online/screens/signin_screen.dart';
 import 'package:asima_online/services/database_service.dart';
 import 'package:asima_online/services/storage_service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -21,104 +20,125 @@ class IdeasInvestmentScreen extends StatefulWidget {
 class _IdeasInvestmentScreenState extends State<IdeasInvestmentScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xfff2f2f2),
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.grey[800],
-        ),
-        centerTitle: true,
-        backgroundColor: Color(0xfff2f2f2),
-        elevation: 0,
-        title: Text(
-          'ملتقى الأفكار والاستثمار',
-          style: TextStyle(
-            color: Colors.grey[800],
-          ),
-        ),
-      ),
-      floatingActionButton:
-          Provider.of<ProviderData>(context).currentUserId != '' &&
-                  Provider.of<ProviderData>(context).currentUserId != null
-              ? FloatingActionButton(
-                  onPressed: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddIdeaScreen(),
-                      ),
-                    );
-                    setState(() {});
-                  },
-                  splashColor: Colors.grey[800],
-                  backgroundColor: Color(0xfff2f2f2),
-                  child: Icon(
-                    Icons.add,
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+          backgroundColor: Color(0xfff2f2f2),
+          appBar: AppBar(
+            bottom: TabBar(
+              tabs: <Widget>[
+                Text(
+                  'بإنتظار الموافقة',
+                  style: TextStyle(
                     color: Colors.grey[800],
                   ),
-                )
-              : null,
-      body: Provider.of<ProviderData>(context).currentUserId == null
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'يجب تسجيل الدخول أولا',
-                    style: TextStyle(
-                      color: Colors.grey[800],
-                      fontSize: 18.0,
-                    ),
-                  ),
-                  FlatButton(
-                    onPressed: () async {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SignIn(),
-                        ),
-                      );
-                      setState(() {});
-                    },
+                ),
+                Text(
+                  'تمت الموافقة',
+                  style: TextStyle(
                     color: Colors.grey[800],
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'تسجيل الدخول',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18.0,
-                        ),
-                      ),
-                    ),
                   ),
-                ],
-              ),
-            )
-          : FutureBuilder(
-              future: DatabaseService.getIdeas(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                if (snapshot.data.documents.length == 0) {
-                  return Center(
-                    child: Text('لا يوجد أفكار حتي الأن'),
-                  );
-                }
-                return ListView.builder(
-                  itemCount: snapshot.data.documents.length,
-                  itemBuilder: (context, index) {
-                    Idea idea = Idea.fromDoc(snapshot.data.documents[index]);
-                    return IdeaCard(
-                      idea: idea,
-                    );
-                  },
-                );
-              },
+                ),
+              ],
             ),
+            iconTheme: IconThemeData(
+              color: Colors.grey[800],
+            ),
+            centerTitle: true,
+            backgroundColor: Color(0xfff2f2f2),
+            elevation: 0,
+            title: Text(
+              'ملتقى الأفكار والاستثمار',
+              style: TextStyle(
+                color: Colors.grey[800],
+              ),
+            ),
+          ),
+          floatingActionButton:
+              Provider.of<ProviderData>(context).currentUserId != '' &&
+                      Provider.of<ProviderData>(context).currentUserId != null
+                  ? FloatingActionButton(
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddIdeaScreen(),
+                          ),
+                        );
+                        setState(() {});
+                      },
+                      splashColor: Colors.grey[800],
+                      backgroundColor: Color(0xfff2f2f2),
+                      child: Icon(
+                        Icons.add,
+                        color: Colors.grey[800],
+                      ),
+                    )
+                  : null,
+          body: TabBarView(
+            children: <Widget>[
+              FutureBuilder(
+                future: DatabaseService.getIdeas(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  List docs = List();
+                  snapshot.data.documents.forEach((doc) {
+                    if (doc['approved'] == false) {
+                      docs.add(doc);
+                    }
+                  });
+                  if (docs.length == 0) {
+                    return Center(
+                      child: Text('لا يوجد أفكار حتي الأن'),
+                    );
+                  }
+                  return ListView.builder(
+                    itemCount: docs.length,
+                    itemBuilder: (context, index) {
+                      Idea idea = Idea.fromDoc(docs[index]);
+                      return IdeaCard(
+                        idea: idea,
+                      );
+                    },
+                  );
+                },
+              ),
+              FutureBuilder(
+                future: DatabaseService.getIdeas(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  List docs = List();
+                  snapshot.data.documents.forEach((doc) {
+                    if (doc['approved'] == true) {
+                      docs.add(doc);
+                    }
+                  });
+                  if (docs.length == 0) {
+                    return Center(
+                      child: Text('لا يوجد أفكار حتي الأن'),
+                    );
+                  }
+                  return ListView.builder(
+                    itemCount: docs.length,
+                    itemBuilder: (context, index) {
+                      Idea idea = Idea.fromDoc(docs[index]);
+                      return IdeaCard(
+                        idea: idea,
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          )),
     );
   }
 }
