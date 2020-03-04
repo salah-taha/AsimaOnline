@@ -3,6 +3,7 @@ import 'package:asima_online/models/idea_model.dart';
 import 'package:asima_online/models/job_chance_model.dart';
 import 'package:asima_online/models/provider_data.dart';
 import 'package:asima_online/models/user.dart';
+import 'package:asima_online/screens/asima_business.dart';
 import 'package:asima_online/screens/ideas_investment_screen.dart';
 import 'package:asima_online/utilities.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -52,6 +53,18 @@ class DatabaseService {
     }
   }
 
+  static Future approveBusiness(String businessId, BuildContext context) async {
+    try {
+      await businessRef.document(businessId).updateData({
+        'approved': true,
+      });
+      return;
+    } catch (e) {
+      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, AsimaBusiness.id);
+    }
+  }
+
   static Future deleteIdea(String ideaId, BuildContext context) async {
     try {
       await ideasRef.document(ideaId).delete();
@@ -59,6 +72,16 @@ class DatabaseService {
     } catch (e) {
       Navigator.pop(context);
       Navigator.pushReplacementNamed(context, IdeasInvestmentScreen.id);
+    }
+  }
+
+  static Future deleteBusiness(String businessId, BuildContext context) async {
+    try {
+      await businessRef.document(businessId).delete();
+      return;
+    } catch (e) {
+      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, AsimaBusiness.id);
     }
   }
 
@@ -92,7 +115,7 @@ class DatabaseService {
 
   static void uploadBusinessCard(
       BusinessCardModel model, BuildContext context) async {
-    cardsRef.document(model.id).setData({
+    businessRef.document(model.id).setData({
       'author': model.author,
       'id': model.id,
       'links': model.links,
