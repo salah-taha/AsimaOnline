@@ -30,6 +30,16 @@ class DatabaseService {
     }
   }
 
+  static Future deleteJob(String jobId, BuildContext context) async {
+    try {
+      await jobChancesRef.document(jobId).delete();
+      return;
+    } catch (e) {
+      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, IdeasInvestmentScreen.id);
+    }
+  }
+
   static Future approveIdea(String ideaId, BuildContext context) async {
     try {
       await ideasRef.document(ideaId).updateData({
@@ -42,13 +52,23 @@ class DatabaseService {
     }
   }
 
+  static Future deleteIdea(String ideaId, BuildContext context) async {
+    try {
+      await ideasRef.document(ideaId).delete();
+      return;
+    } catch (e) {
+      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, IdeasInvestmentScreen.id);
+    }
+  }
+
   static Future<DocumentSnapshot> getUserInfo(String userId) async {
     DocumentSnapshot userDoc = await usersRef.document(userId).get();
     return userDoc;
   }
 
-  static sendMessage(String message, String roomId, String userId) {
-    chatRoomsRef.document(roomId).collection('messages').add({
+  static sendMessage(String message, String userId) {
+    chatRoomRef.add({
       'message': message,
       'author': userId,
       'timestamp': DateTime.now().toIso8601String(),
@@ -56,8 +76,7 @@ class DatabaseService {
   }
 
   static Stream getChatMessages(String roomId) {
-    final messages =
-        chatRoomsRef.document(roomId).collection('messages').snapshots();
+    final messages = chatRoomRef.snapshots();
     return messages;
   }
 

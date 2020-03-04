@@ -153,7 +153,18 @@ class ViewJob extends StatelessWidget {
                 color: Colors.grey[800],
               ),
             )
-          : null,
+          : FloatingActionButton(
+              onPressed: () async {
+                await DatabaseService.deleteJob(jobChance.id, context);
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, JobChancesScreen.id);
+              },
+              backgroundColor: Color(0xfff2f2f2),
+              child: Icon(
+                Icons.delete,
+                color: Colors.grey[800],
+              ),
+            ),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
