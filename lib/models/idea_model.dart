@@ -13,6 +13,7 @@ class Idea {
   final notes;
   final phoneNumber;
   final email;
+  final id;
 
   Idea({
     this.phoneNumber,
@@ -27,21 +28,24 @@ class Idea {
     this.notes,
     this.projectHolder,
     this.suggestedCity,
+    this.id,
   });
 
   factory Idea.fromDoc(DocumentSnapshot doc) {
     return Idea(
-        phoneNumber: doc['phoneNumber'],
-        email: doc['email'],
-        description: doc['description'],
-        title: doc['title'],
-        country: doc['country'],
-        imageUrl: doc['imageUrl'],
-        holderExp: doc['holderExp'],
-        maxBudget: doc['maxBudget'],
-        minBudget: doc['minBudget'],
-        notes: doc['notes'],
-        projectHolder: doc['projectHolder'],
-        suggestedCity: doc['suggestedCity']);
+      phoneNumber: doc['phoneNumber'],
+      email: doc['email'],
+      description: doc['description'],
+      title: doc['title'],
+      country: doc['country'],
+      imageUrl: doc['imageUrl'],
+      holderExp: doc['holderExp'],
+      maxBudget: doc['maxBudget'],
+      minBudget: doc['minBudget'],
+      notes: doc['notes'],
+      projectHolder: doc['projectHolder'],
+      suggestedCity: doc['suggestedCity'],
+      id: doc.documentID,
+    );
   }
 }

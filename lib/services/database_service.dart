@@ -17,6 +17,13 @@ class DatabaseService {
     });
   }
 
+  static Future approveJob(String jobId) async {
+    await jobChancesRef.document(jobId).updateData({
+      'approved': true,
+    });
+    return;
+  }
+
   static Future<DocumentSnapshot> getUserInfo(String userId) async {
     DocumentSnapshot userDoc = await usersRef.document(userId).get();
     return userDoc;

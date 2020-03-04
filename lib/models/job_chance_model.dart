@@ -10,6 +10,7 @@ class JobChance {
   final salary;
   final phoneNumber;
   final email;
+  final id;
 
   JobChance(
       {this.title,
@@ -20,7 +21,8 @@ class JobChance {
       this.city,
       this.companyName,
       this.phoneNumber,
-      this.salary});
+      this.salary,
+      this.id});
   factory JobChance.fromDoc(DocumentSnapshot doc) {
     return JobChance(
         title: doc['title'],
@@ -31,6 +33,7 @@ class JobChance {
         city: doc['city'],
         companyName: doc['companyName'],
         phoneNumber: doc['phoneNumber'],
-        salary: doc['salary']);
+        salary: doc['salary'],
+        id: doc.documentID);
   }
 }

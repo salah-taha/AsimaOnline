@@ -22,71 +22,131 @@ class JobChancesScreen extends StatefulWidget {
 class _JobChancesScreenState extends State<JobChancesScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xfff2f2f2),
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.grey[800],
-        ),
-        title: Text(
-          'فرص عمل',
-          style: TextStyle(
-            color: Colors.grey[800],
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: Color(0xfff2f2f2),
-        elevation: 0,
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AddJobScreen(),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+          backgroundColor: Color(0xfff2f2f2),
+          appBar: AppBar(
+            bottom: TabBar(
+              tabs: <Widget>[
+                Text(
+                  'بإنتظار الموافقة',
+                  style: TextStyle(
+                    color: Colors.grey[800],
+                  ),
+                ),
+                Text(
+                  'تمت الموافقة',
+                  style: TextStyle(
+                    color: Colors.grey[800],
+                  ),
+                ),
+              ],
             ),
-          );
-          Navigator.popAndPushNamed(context, JobChancesScreen.id);
-        },
-        child: Icon(
-          Icons.add,
-          color: Colors.grey[800],
-        ),
-        splashColor: Colors.grey[600],
-        backgroundColor: Color(0xfff2f2f2),
-      ),
-      body: FutureBuilder(
-        future: DatabaseService.getJobChancesDocs(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          if (snapshot.data.documents.length == 0) {
-            return Center(
-              child: Text('لا يوجد فرص عمل الأن'),
-            );
-          }
-          return ListView.builder(
-            itemCount: snapshot.data.documents.length,
-            itemBuilder: (context, index) {
-              JobChance jobChance =
-                  JobChance.fromDoc(snapshot.data.documents[index]);
-              return JobChanceCard(
-                jobChance: jobChance,
+            iconTheme: IconThemeData(
+              color: Colors.grey[800],
+            ),
+            title: Text(
+              'فرص عمل',
+              style: TextStyle(
+                color: Colors.grey[800],
+              ),
+            ),
+            centerTitle: true,
+            backgroundColor: Color(0xfff2f2f2),
+            elevation: 0,
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddJobScreen(),
+                ),
               );
+              Navigator.popAndPushNamed(context, JobChancesScreen.id);
             },
-          );
-        },
-      ),
+            child: Icon(
+              Icons.add,
+              color: Colors.grey[800],
+            ),
+            splashColor: Colors.grey[600],
+            backgroundColor: Color(0xfff2f2f2),
+          ),
+          body: TabBarView(
+            children: <Widget>[
+              FutureBuilder(
+                future: DatabaseService.getJobChancesDocs(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  List docs = List();
+                  snapshot.data.documents.forEach((doc) {
+                    if (doc['approved'] == false) {
+                      docs.add(doc);
+                    }
+                  });
+                  if (docs.length == 0) {
+                    return Center(
+                      child: Text('لا يوجد فرص عمل الأن'),
+                    );
+                  }
+                  return ListView.builder(
+                    itemCount: docs.length,
+                    itemBuilder: (context, index) {
+                      JobChance jobChance = JobChance.fromDoc(docs[index]);
+                      return JobChanceCard(
+                        jobChance: jobChance,
+                        approved: false,
+                      );
+                    },
+                  );
+                },
+              ),
+              FutureBuilder(
+                future: DatabaseService.getJobChancesDocs(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  List docs = List();
+                  snapshot.data.documents.forEach((doc) {
+                    if (doc['approved'] == true) {
+                      docs.add(doc);
+                    }
+                  });
+                  if (docs.length == 0) {
+                    return Center(
+                      child: Text('لا يوجد فرص عمل الأن'),
+                    );
+                  }
+                  return ListView.builder(
+                    itemCount: docs.length,
+                    itemBuilder: (context, index) {
+                      JobChance jobChance = JobChance.fromDoc(docs[index]);
+                      return JobChanceCard(
+                        jobChance: jobChance,
+                        approved: true,
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          )),
     );
   }
 }
 
 class ViewJob extends StatelessWidget {
   final JobChance jobChance;
-  ViewJob({this.jobChance});
+  final approved;
+  ViewJob({this.jobChance, this.approved});
 
   @override
   Widget build(BuildContext context) {
@@ -106,6 +166,20 @@ class ViewJob extends StatelessWidget {
           ),
         ),
       ),
+      floatingActionButton: !approved
+          ? FloatingActionButton(
+              onPressed: () async {
+                await DatabaseService.approveJob(jobChance.id);
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, JobChancesScreen.id);
+              },
+              backgroundColor: Color(0xfff2f2f2),
+              child: Icon(
+                Icons.check,
+                color: Colors.grey[800],
+              ),
+            )
+          : SizedBox(),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -384,7 +458,8 @@ class ViewJob extends StatelessWidget {
 
 class JobChanceCard extends StatelessWidget {
   final JobChance jobChance;
-  JobChanceCard({this.jobChance});
+  final approved;
+  JobChanceCard({this.jobChance, this.approved});
 
   @override
   Widget build(BuildContext context) {
@@ -395,6 +470,7 @@ class JobChanceCard extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => ViewJob(
               jobChance: jobChance,
+              approved: approved,
             ),
           ),
         );

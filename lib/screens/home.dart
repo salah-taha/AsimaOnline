@@ -1,19 +1,9 @@
-import 'package:asima_online/screens/about_us.dart';
-import 'package:asima_online/screens/asima_books.dart';
 import 'package:asima_online/screens/asima_business.dart';
-import 'package:asima_online/screens/asima_marketing_webview.dart';
-import 'package:asima_online/screens/asima_news.dart';
-import 'package:asima_online/screens/asima_radio.dart';
 import 'package:asima_online/screens/chat_screens.dart';
-import 'package:asima_online/screens/contact_with_us.dart';
-import 'package:asima_online/screens/currency_exchange.dart';
 import 'package:asima_online/screens/ideas_investment_screen.dart';
 import 'package:asima_online/screens/job_chances_screen.dart';
-import 'package:asima_online/screens/profile_screen.dart';
 import 'package:asima_online/screens/question_answer.dart';
-import 'package:asima_online/screens/signin_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_radio/flutter_radio.dart';
 
 //home page screen
 
@@ -25,18 +15,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future<void> audioStart() async {
-    FlutterRadio.audioStart();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    //initialize audio player
-    audioStart();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,28 +57,6 @@ class _HomePageState extends State<HomePage> {
               ),
 
               Holder(
-                firstChild: 'العاصمة للتسويق الرقمي',
-                firstWidget: AsimaMarketing(),
-                firstIcon: Icons.shopping_basket,
-                secondChild: 'استماع فوري لإذاعة العاصمة',
-                secondIcon: Icons.headset,
-                secondWidget: RadioAsima(),
-                thirdChild: 'آخر الأخبار',
-                thirdWidget: AsimaNews(),
-                thirdIcon: Icons.assignment,
-              ),
-              Holder(
-                secondChild: 'أسعار العملات',
-                secondIcon: Icons.monetization_on,
-                secondWidget: CurrencyExchanger(),
-                firstChild: 'دليل الأعمال',
-                firstWidget: AsimaBusiness(),
-                firstIcon: Icons.business_center,
-                thirdChild: 'سؤال وجواب',
-                thirdIcon: Icons.question_answer,
-                thirdWidget: QuestionAnswerScreen(),
-              ),
-              Holder(
                 firstChild: 'فرص عمل',
                 firstWidget: JobChancesScreen(),
                 firstIcon: Icons.search,
@@ -112,23 +68,12 @@ class _HomePageState extends State<HomePage> {
                 thirdIcon: Icons.chat_bubble,
               ),
               Holder(
-                secondChild: 'من نحن',
-                secondIcon: Icons.error,
-                secondWidget: AboutUs(),
-                firstIcon: Icons.clear_all,
-                firstChild: 'تواصل معنا',
-                firstWidget: ContactWithUs(),
-                thirdWidget: AsimaBooks(),
-                thirdIcon: Icons.book,
-                thirdChild: 'كتابك على باب منزلك',
-              ),
-              Holder(
-                firstWidget: SignIn(),
-                firstChild: 'تسجيل الدخول',
-                firstIcon: Icons.input,
-                secondChild: 'الصفحة الشخصية',
-                secondIcon: Icons.person,
-                secondWidget: ProfileScreen(),
+                firstChild: 'دليل الأعمال',
+                firstWidget: AsimaBusiness(),
+                firstIcon: Icons.business_center,
+                secondChild: 'سؤال وجواب',
+                secondIcon: Icons.question_answer,
+                secondWidget: QuestionAnswerScreen(),
               ),
             ],
           ),
