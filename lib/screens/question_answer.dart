@@ -1,8 +1,5 @@
-import 'package:asima_online/models/provider_data.dart';
-import 'package:asima_online/screens/signin_screen.dart';
 import 'package:asima_online/services/database_service.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 List categories = ['اقتصادي', 'قانوني', 'غير ذلك'];
 
@@ -455,148 +452,108 @@ class _AddQuestionScreenState extends State<AddQuestionScreen> {
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : Provider.of<ProviderData>(context).currentUserId == null
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'يجب تسجيل الدخول أولا',
-                          style: TextStyle(
-                            fontSize: 18.0,
+          : SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(
+                parent: ScrollPhysics(
+                  parent: BouncingScrollPhysics(),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  SizedBox(
+                    width: double.infinity,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    child: DropdownButtonHideUnderline(
+                      child: Container(
+                        height: 50,
+                        decoration: ShapeDecoration(
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                                color: selectedCat == null
+                                    ? Colors.grey
+                                    : Colors.blue,
+                                width: 1.0,
+                                style: BorderStyle.solid),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(100)),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: DropdownButton(
+                            hint: Text('اختر تصنيف'),
+                            isExpanded: true,
+                            value: selectedCat ?? null,
+                            items: categories
+                                .map<DropdownMenuItem<String>>((value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (index) {
+                              setState(() {
+                                selectedCat = index;
+                              });
+                            },
                           ),
                         ),
                       ),
-                      FlatButton(
-                        splashColor: Color(0xfff2f2f2),
-                        color: Colors.grey[800],
-                        onPressed: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SignIn(),
-                            ),
-                          );
-                          setState(() {});
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 8.0,
-                            horizontal: 25.0,
-                          ),
-                          child: Text(
-                            'تسجيل الدخول',
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              : SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(
-                    parent: ScrollPhysics(
-                      parent: BouncingScrollPhysics(),
                     ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      SizedBox(
-                        width: double.infinity,
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        child: DropdownButtonHideUnderline(
-                          child: Container(
-                            height: 50,
-                            decoration: ShapeDecoration(
-                              shape: RoundedRectangleBorder(
-                                side: BorderSide(
-                                    color: selectedCat == null
-                                        ? Colors.grey
-                                        : Colors.blue,
-                                    width: 1.0,
-                                    style: BorderStyle.solid),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(100)),
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: DropdownButton(
-                                hint: Text('اختر تصنيف'),
-                                isExpanded: true,
-                                value: selectedCat ?? null,
-                                items: categories
-                                    .map<DropdownMenuItem<String>>((value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                                onChanged: (index) {
-                                  setState(() {
-                                    selectedCat = index;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 25.0, vertical: 15),
+                    child: TextField(
+                      maxLines: 10,
+                      maxLength: 350,
+                      controller: _newQuestionField,
+                      focusNode: _focusNode,
+                      decoration: InputDecoration(
+                        hintText: 'إضافة سؤال',
+                        border: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(30),
                         ),
+                        filled: true,
+                        fillColor: Colors.white,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 25.0, vertical: 15),
-                        child: TextField(
-                          maxLines: 10,
-                          maxLength: 350,
-                          controller: _newQuestionField,
-                          focusNode: _focusNode,
-                          decoration: InputDecoration(
-                            hintText: 'إضافة سؤال',
-                            border: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blue),
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            filled: true,
-                            fillColor: Colors.white,
-                          ),
-                        ),
-                      ),
-                      FlatButton(
-                        splashColor: Color(0xfff2f2f2),
-                        color: Colors.grey[800],
-                        onPressed: () async {
-                          if (selectedCat != null &&
-                              _newQuestionField.text.isNotEmpty) {
-                            setState(() {
-                              isLoading = true;
-                            });
-                            await DatabaseService.uploadQuestion(
-                                selectedCat, _newQuestionField.text, context);
-                            setState(() {
-                              isLoading = false;
-                            });
-                          }
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 8.0,
-                            horizontal: 25.0,
-                          ),
-                          child: Text(
-                            'نشر السؤال',
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                          ),
-                        ),
-                      )
-                    ],
+                    ),
                   ),
-                ),
+                  FlatButton(
+                    splashColor: Color(0xfff2f2f2),
+                    color: Colors.grey[800],
+                    onPressed: () async {
+                      if (selectedCat != null &&
+                          _newQuestionField.text.isNotEmpty) {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        await DatabaseService.uploadQuestion(
+                            selectedCat, _newQuestionField.text, context);
+                        setState(() {
+                          isLoading = false;
+                        });
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8.0,
+                        horizontal: 25.0,
+                      ),
+                      child: Text(
+                        'نشر السؤال',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
     );
   }
 }
