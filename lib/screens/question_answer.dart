@@ -81,7 +81,8 @@ class _QuestionAnswerScreenState extends State<QuestionAnswerScreen> {
           }
           List questions = List();
           snapshot.data.documents.forEach((doc) {
-            if (doc['categorey'].contains(selectedCat ?? '')) {
+            if (doc['categorey'].contains(selectedCat ?? '') &&
+                doc['approved'] == true) {
               questions.add(doc);
             }
           });

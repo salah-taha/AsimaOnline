@@ -300,19 +300,21 @@ class _AsimaBusinessState extends State<AsimaBusiness> {
                     child: CircularProgressIndicator(),
                   );
                 }
-                if (snapshot.data.documents.length == 0) {
-                  return Center(
-                    child: Text('لا يوجد خدمات الأن'),
-                  );
-                }
                 List docs = List();
                 snapshot.data.documents.forEach((doc) {
                   if (doc['address'][0].contains(selectedState ?? '') &&
                       doc['address'][1].contains(selectedCountry ?? '') &&
-                      doc['type'].contains(selectedType ?? '')) {
+                      doc['type'].contains(selectedType ?? '') &&
+                      doc['approved'] == true) {
                     docs.add(doc);
                   }
                 });
+                if (docs.length == 0) {
+                  return Center(
+                    child: Text('لا يوجد خدمات الأن'),
+                  );
+                }
+
                 return ListView.builder(
                   itemCount: docs.length,
                   // ignore: missing_return

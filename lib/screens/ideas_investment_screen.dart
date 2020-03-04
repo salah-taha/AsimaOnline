@@ -103,15 +103,22 @@ class _IdeasInvestmentScreenState extends State<IdeasInvestmentScreen> {
                     child: CircularProgressIndicator(),
                   );
                 }
-                if (snapshot.data.documents.length == 0) {
+                List docs = List();
+                snapshot.data.documents.forEach((doc) {
+                  if (doc['approved'] == true) {
+                    docs.add(doc);
+                  }
+                });
+                if (docs.length == 0) {
                   return Center(
                     child: Text('لا يوجد أفكار حتي الأن'),
                   );
                 }
+
                 return ListView.builder(
-                  itemCount: snapshot.data.documents.length,
+                  itemCount: docs.length,
                   itemBuilder: (context, index) {
-                    Idea idea = Idea.fromDoc(snapshot.data.documents[index]);
+                    Idea idea = Idea.fromDoc(docs[index]);
                     return IdeaCard(
                       idea: idea,
                     );

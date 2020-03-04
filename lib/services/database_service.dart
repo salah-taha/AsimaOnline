@@ -49,6 +49,7 @@ class DatabaseService {
       'secondaryImages': model.secondaryImages,
       'type': model.type,
       'timestamp': DateTime.now().toIso8601String(),
+      'approved': false,
     });
     Navigator.pushReplacementNamed(context, AsimaBusiness.id);
   }
@@ -68,6 +69,7 @@ class DatabaseService {
       'categorey': cat,
       'author': userName,
       'time': DateTime.now().toIso8601String(),
+      'approved': false,
     });
     return true;
   }
@@ -116,6 +118,7 @@ class DatabaseService {
       'phoneNumber': jobChance.phoneNumber,
       'companyName': jobChance.companyName,
       'timestamp': DateTime.now().toIso8601String(),
+      'approved': false,
     });
     return;
   }
@@ -141,7 +144,8 @@ class DatabaseService {
       'notes': idea.notes,
       'phoneNumber': idea.phoneNumber,
       'email': idea.email,
-      'timestamp': DateTime.now().toIso8601String()
+      'timestamp': DateTime.now().toIso8601String(),
+      'approved': false,
     });
   }
 

@@ -63,16 +63,22 @@ class _JobChancesScreenState extends State<JobChancesScreen> {
               child: CircularProgressIndicator(),
             );
           }
-          if (snapshot.data.documents.length == 0) {
+          List docs = List();
+          snapshot.data.documents.forEach((doc) {
+            if (doc['approved'] == true) {
+              docs.add(doc);
+            }
+          });
+          if (docs.length == 0) {
             return Center(
               child: Text('لا يوجد فرص عمل الأن'),
             );
           }
+
           return ListView.builder(
-            itemCount: snapshot.data.documents.length,
+            itemCount: docs.length,
             itemBuilder: (context, index) {
-              JobChance jobChance =
-                  JobChance.fromDoc(snapshot.data.documents[index]);
+              JobChance jobChance = JobChance.fromDoc(docs[index]);
               return JobChanceCard(
                 jobChance: jobChance,
               );
