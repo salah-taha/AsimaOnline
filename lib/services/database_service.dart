@@ -65,9 +65,31 @@ class DatabaseService {
     }
   }
 
+  static Future approveQuestion(String questionId, BuildContext context) async {
+    try {
+      await questionRef.document(questionId).updateData({
+        'approved': true,
+      });
+      return;
+    } catch (e) {
+      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, AsimaBusiness.id);
+    }
+  }
+
   static Future deleteIdea(String ideaId, BuildContext context) async {
     try {
       await ideasRef.document(ideaId).delete();
+      return;
+    } catch (e) {
+      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, IdeasInvestmentScreen.id);
+    }
+  }
+
+  static Future deleteQuestion(String questionId, BuildContext context) async {
+    try {
+      await questionRef.document(questionId).delete();
       return;
     } catch (e) {
       Navigator.pop(context);
