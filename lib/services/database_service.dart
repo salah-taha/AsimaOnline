@@ -62,6 +62,16 @@ class DatabaseService {
     }
   }
 
+  static Future deleteMessage(String messageId, BuildContext context) async {
+    try {
+      await chatRoomRef.document(messageId).delete();
+      return;
+    } catch (e) {
+      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, IdeasInvestmentScreen.id);
+    }
+  }
+
   static Future<DocumentSnapshot> getUserInfo(String userId) async {
     DocumentSnapshot userDoc = await usersRef.document(userId).get();
     return userDoc;

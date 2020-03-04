@@ -125,57 +125,126 @@ class MessageTile extends StatelessWidget {
               child: Container(),
             );
           }
-          return Align(
-            alignment:
-                userId == sender ? Alignment.centerRight : Alignment.centerLeft,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: userId == sender
-                  ? CrossAxisAlignment.start
-                  : CrossAxisAlignment.end,
-              children: <Widget>[
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
-                  child: Text(
-                    snapshot.data['name'],
-                    style: TextStyle(
-                      color: Colors.grey[800],
-                      fontSize: 12,
+          return GestureDetector(
+            onLongPress: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => Dialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    height: 200.0,
+                    width: 300.0,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 15.0),
+                          child: Text(
+                            'تحذير',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Text(
+                              'مسح هذه الرسالة ؟؟ ${userData['message']}',
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                              textAlign: TextAlign.center,
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              FlatButton(
+                                onPressed: () {
+                                  DatabaseService.deleteMessage(
+                                      userData.documentID, context);
+                                  Navigator.pop(context);
+                                },
+                                child: Text('مسح'),
+                              ),
+                              FlatButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text('الغاء'),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
                     ),
                   ),
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: userId.trim() == sender
-                            ? Radius.circular(15)
-                            : Radius.circular(0),
-                        bottomLeft: Radius.circular(15),
-                        bottomRight: Radius.circular(15),
-                        topRight: userId == sender
-                            ? Radius.circular(0)
-                            : Radius.circular(15),
+              );
+            },
+            child: Align(
+              alignment: userId == sender
+                  ? Alignment.centerRight
+                  : Alignment.centerLeft,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: userId == sender
+                    ? CrossAxisAlignment.start
+                    : CrossAxisAlignment.end,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 5),
+                    child: Text(
+                      snapshot.data['name'],
+                      style: TextStyle(
+                        color: Colors.grey[800],
+                        fontSize: 12,
                       ),
-                      color: userId == sender ? Colors.blue : Colors.grey[300],
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        userData['message'],
-                        style: TextStyle(
-                          color: userId == sender
-                              ? Colors.white
-                              : Colors.grey[800],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 5),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: userId.trim() == sender
+                              ? Radius.circular(15)
+                              : Radius.circular(0),
+                          bottomLeft: Radius.circular(15),
+                          bottomRight: Radius.circular(15),
+                          topRight: userId == sender
+                              ? Radius.circular(0)
+                              : Radius.circular(15),
+                        ),
+                        color:
+                            userId == sender ? Colors.blue : Colors.grey[300],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          userData['message'],
+                          style: TextStyle(
+                            color: userId == sender
+                                ? Colors.white
+                                : Colors.grey[800],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         });
