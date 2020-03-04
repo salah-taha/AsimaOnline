@@ -143,7 +143,7 @@ class ViewJob extends StatelessWidget {
       floatingActionButton: !approved
           ? FloatingActionButton(
               onPressed: () async {
-                await DatabaseService.approveJob(jobChance.id);
+                await DatabaseService.approveJob(jobChance.id, context);
                 Navigator.pop(context);
                 Navigator.pushReplacementNamed(context, JobChancesScreen.id);
               },
@@ -153,7 +153,7 @@ class ViewJob extends StatelessWidget {
                 color: Colors.grey[800],
               ),
             )
-          : SizedBox(),
+          : null,
       body: SingleChildScrollView(
         child: Center(
           child: Column(

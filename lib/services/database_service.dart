@@ -3,6 +3,7 @@ import 'package:asima_online/models/idea_model.dart';
 import 'package:asima_online/models/job_chance_model.dart';
 import 'package:asima_online/models/provider_data.dart';
 import 'package:asima_online/models/user.dart';
+import 'package:asima_online/screens/ideas_investment_screen.dart';
 import 'package:asima_online/utilities.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,11 +18,28 @@ class DatabaseService {
     });
   }
 
-  static Future approveJob(String jobId) async {
-    await jobChancesRef.document(jobId).updateData({
-      'approved': true,
-    });
-    return;
+  static Future approveJob(String jobId, BuildContext context) async {
+    try {
+      await jobChancesRef.document(jobId).updateData({
+        'approved': true,
+      });
+      return;
+    } catch (e) {
+      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, IdeasInvestmentScreen.id);
+    }
+  }
+
+  static Future approveIdea(String ideaId, BuildContext context) async {
+    try {
+      await ideasRef.document(ideaId).updateData({
+        'approved': true,
+      });
+      return;
+    } catch (e) {
+      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, IdeasInvestmentScreen.id);
+    }
   }
 
   static Future<DocumentSnapshot> getUserInfo(String userId) async {
