@@ -33,6 +33,10 @@ dependencies:
   provider:
   flutter_facebook_login:
   url_launcher: ^5.2.5
+  firebase_messaging:
+
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

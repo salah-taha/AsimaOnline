@@ -4,6 +4,7 @@ import 'package:asima_online/screens/asima_books.dart';
 import 'package:asima_online/screens/asima_business.dart';
 import 'package:asima_online/screens/asima_news.dart';
 import 'package:asima_online/screens/asima_radio.dart';
+import 'package:asima_online/screens/breaking_news_screen.dart';
 import 'package:asima_online/screens/chat_screens.dart';
 import 'package:asima_online/screens/contact_with_us.dart';
 import 'package:asima_online/screens/home.dart';
@@ -63,6 +64,7 @@ class MyApp extends StatelessWidget {
           AboutUs.id: (context) => AboutUs(),
           AsimaBooks.id: (context) => AsimaBooks(),
           HomePage.id: (context) => HomePage(),
+          BreakingNews.id: (context) => BreakingNews(),
         },
       ),
     );

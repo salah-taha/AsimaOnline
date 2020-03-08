@@ -51,6 +51,7 @@ class DatabaseService {
       'timestamp': DateTime.now().toIso8601String(),
       'approved': false,
     });
+    Navigator.pop(context);
     Navigator.pushReplacementNamed(context, AsimaBusiness.id);
   }
 

@@ -1,3 +1,4 @@
+import 'package:asima_online/models/notification_hundler.dart';
 import 'package:asima_online/models/provider_data.dart';
 import 'package:asima_online/screens/about_us.dart';
 import 'package:asima_online/screens/asima_books.dart';
@@ -5,6 +6,7 @@ import 'package:asima_online/screens/asima_business.dart';
 import 'package:asima_online/screens/asima_marketing_webview.dart';
 import 'package:asima_online/screens/asima_news.dart';
 import 'package:asima_online/screens/asima_radio.dart';
+import 'package:asima_online/screens/breaking_news_screen.dart';
 import 'package:asima_online/screens/chat_screens.dart';
 import 'package:asima_online/screens/contact_with_us.dart';
 import 'package:asima_online/screens/currency_exchange.dart';
@@ -48,6 +50,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     audioStart();
+    new FirebaseNotifications().setUpFirebase();
     _getUserId(context);
   }
 
@@ -143,6 +146,9 @@ class _HomePageState extends State<HomePage> {
                 secondChild: 'الصفحة الشخصية',
                 secondIcon: Icons.person,
                 secondWidget: ProfileScreen(),
+                thirdChild: 'أخبار عاجلة',
+                thirdIcon: Icons.add_alert,
+                thirdWidget: BreakingNews(),
               ),
             ],
           ),

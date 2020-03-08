@@ -9,3 +9,4 @@ final chatRoomRef = _fireStore.collection('chatRoom');
 final questionRef = _fireStore.collection('questions');
 final jobChancesRef = _fireStore.collection('jobChances');
 final ideasRef = _fireStore.collection('ideas');
+final newsRef = _fireStore.collection('news');
