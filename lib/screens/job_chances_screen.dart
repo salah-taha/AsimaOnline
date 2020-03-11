@@ -543,6 +543,51 @@ class _AddJobScreenState extends State<AddJobScreen> {
           city: selectedState);
       DatabaseService.uploadJobChance(_jobChance);
       Navigator.pop(context);
+      showDialog(
+          context: context,
+          builder: (BuildContext context) => Dialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  height: 200.0,
+                  width: 300.0,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15.0),
+                        child: Text(
+                          'اضافة صور ثانوية',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'تم ارسال العمل وبإنتظار الموافقة عليه من قبل الإدارة',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: FlatButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text('تم'),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ));
     }
   }
 

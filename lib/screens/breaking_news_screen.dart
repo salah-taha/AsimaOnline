@@ -52,7 +52,7 @@ class BreakingNews extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          snapshot.data.documents[index]['news'],
+                          snapshot.data.documents[index]['title'] ?? '',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 15,

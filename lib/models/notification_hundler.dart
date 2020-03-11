@@ -7,6 +7,7 @@ class FirebaseNotifications {
 
   void setUpFirebase() {
     _firebaseMessaging = FirebaseMessaging();
+    _firebaseMessaging.subscribeToTopic('news');
     firebaseCloudMessaging_Listeners();
   }
 
