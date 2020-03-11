@@ -176,7 +176,7 @@ class DatabaseService {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 15.0),
                       child: Text(
-                        'اضافة صور ثانوية',
+                        'بإنتظار الموافقة',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
