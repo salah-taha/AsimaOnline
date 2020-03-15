@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>475718967437-kn784f8jqgefp6ecenbs5q5gvsqq2u2v.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.475718967437-kn784f8jqgefp6ecenbs5q5gvsqq2u2v</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>475718967437-4ms925tq0elb5r1s05goagc76k7jck9j.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDavSXIR4jvEHCXPbniDQWYjhttJSTg-oM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>475718967437</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>net.asimaonline.asimaOnline</string>
+	<key>PROJECT_ID</key>
+	<string>asima-online</string>
+	<key>STORAGE_BUCKET</key>
+	<string>asima-online.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:475718967437:ios:98159173fbd34affea82c4</string>
+	<key>DATABASE_URL</key>
+	<string>https://asima-online.firebaseio.com</string>
+</dict>
+</plist>
