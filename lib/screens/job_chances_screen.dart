@@ -46,7 +46,6 @@ class _JobChancesScreenState extends State<JobChancesScreen> {
               builder: (context) => AddJobScreen(),
             ),
           );
-          Navigator.popAndPushNamed(context, JobChancesScreen.id);
         },
         child: Icon(
           Icons.add,
@@ -541,8 +540,7 @@ class _AddJobScreenState extends State<AddJobScreen> {
           companyName: _companyName,
           country: selectedCountry,
           city: selectedState);
-      DatabaseService.uploadJobChance(_jobChance);
-      Navigator.pop(context);
+      await DatabaseService.uploadJobChance(context, _jobChance);
       showDialog(
           context: context,
           builder: (BuildContext context) => Dialog(

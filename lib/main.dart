@@ -42,9 +42,9 @@ class MyApp extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
         ],
         supportedLocales: [
-          Locale("fa", "IR"), // OR Locale('ar', 'AE') OR Other RTL locales
+          Locale("ar", "EG"), // OR Locale('ar', 'AE') OR Other RTL locales
         ],
-        locale: Locale("fa", "IR"),
+        locale: Locale("ar"),
         title: 'العاصمة اونلاين',
         initialRoute: HomePage.id,
         routes: {

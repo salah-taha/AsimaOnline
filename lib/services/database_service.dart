@@ -4,6 +4,7 @@ import 'package:asima_online/models/job_chance_model.dart';
 import 'package:asima_online/models/provider_data.dart';
 import 'package:asima_online/models/user.dart';
 import 'package:asima_online/screens/asima_business.dart';
+import 'package:asima_online/screens/job_chances_screen.dart';
 import 'package:asima_online/utilities.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -108,7 +109,7 @@ class DatabaseService {
     return questions;
   }
 
-  static uploadJobChance(JobChance jobChance) async {
+  static uploadJobChance(BuildContext context, JobChance jobChance) async {
     await jobChancesRef.add({
       'title': jobChance.title,
       'image': jobChance.image,
@@ -122,6 +123,8 @@ class DatabaseService {
       'timestamp': DateTime.now().toIso8601String(),
       'approved': false,
     });
+    Navigator.pop(context);
+    Navigator.pushReplacementNamed(context, JobChancesScreen.id);
     return;
   }
 

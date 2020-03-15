@@ -21,7 +21,7 @@ class BreakingNews extends StatelessWidget {
         elevation: 0,
       ),
       body: FutureBuilder(
-        future: newsRef.getDocuments(),
+        future: newsRef.orderBy('timestamp').getDocuments(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             return Center(
