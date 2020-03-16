@@ -49,5 +49,34 @@
       <true/>
       <key>NSAllowsArbitraryLoadsInWebContent</key>
       <true/>
+     <key>NSPhotoLibraryUsageDescription</key>
+     <true/>
+     <key>NSCameraUsageDescription</key>
+     <true/>
+     <key>NSMicrophoneUsageDescription</key>
+     <true/>
+     <key>CFBundleURLTypes</key>
+     <array>
+     	<dict>
+     		<key>CFBundleTypeRole</key>
+     		<string>Editor</string>
+     		<key>CFBundleURLSchemes</key>
+     		<array>
+     			<string>com.googleusercontent.apps.475718967437-kn784f8jqgefp6ecenbs5q5gvsqq2u2v</string>
+     		</array>
+     	</dict>
+     </array>
+     <key>FacebookAppID</key>
+     <string>776594502829962</string>
+     <key>FacebookDisplayName</key>
+     <string>Asima_Online</string>
+
+     <key>LSApplicationQueriesSchemes</key>
+     <array>
+         <string>fbapi</string>
+         <string>fb-messenger-share-api</string>
+         <string>fbauth2</string>
+         <string>fbshareextension</string>
+     </array>
 </dict>
 </plist>
